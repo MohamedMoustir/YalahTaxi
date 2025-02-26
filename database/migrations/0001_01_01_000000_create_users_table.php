@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_photo');
             $table->string('phone');
+            $table->enum('role',['driver','passenger','Admin'])->default('passenger');
             $table->rememberToken();
             $table->timestamps();
         });
