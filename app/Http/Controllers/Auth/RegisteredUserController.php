@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\driver;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\trajet;
+use App\Models\Course;
+
 
 class RegisteredUserController extends Controller
 {
@@ -19,8 +23,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-
-        return view('auth.register');
+        $nomLine = trajet::all();
+        return view('auth.register', compact('nomLine'));
+        // return view('auth.register');
     }
 
     /**
@@ -30,24 +35,49 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-       
+
 
         if ($request->hasFile('profile_photo')) {
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
         }
-        
+
         $user = User::create([
             'profile_photo' => $path,
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
-       
+
+        $user->save();
+        $lastinsertId = $user->id;
+
+        if ($request->role == 'driver') {
+dd($request);
+
+            $driver = driver::create([
+                'user_id' => $lastinsertId,
+                'license_number' => 0,
+                'current_location' => $request->current_location,
+            ]);
+            //    lastinsertid driver
+            $driver->save();
+            $id_driver = $driver->id;
+
+            course::create([
+                'id_driver' => $id_driver,
+                'id_trajet' => $request->line,
+
+            ]);
+        }
+
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('home', absolute: false));
     }
+
 }
