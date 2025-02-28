@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Concurrency\Driver;
 use Illuminate\Database\Eloquent\Model;
 
 class trajet extends Model
@@ -9,14 +10,24 @@ class trajet extends Model
     protected $table = 'trajets';
     protected $fillable=[
         'nom',
+        'prix',
     ];
     
-    public function detailstrajets(){
-        return $this->hasEntry(details_trajet::class);
+    public function details_trajet(){
+        return $this->hasOne(details_trajet::class,'trajet_id');
     }
 
-    // public function reservations(){
-    //     return $this->hasMany(re::class);
-    // }
+    public function course(){
+        return $this->hasMany(Course::class);
+    }
+    public function driveer()
+    {
+        return $this->hasMany(driveer::class,'trajet_id');
+    }
     
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }    
 }

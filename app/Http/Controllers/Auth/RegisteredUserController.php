@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\driver;
+use App\Models\driveer;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -54,22 +54,23 @@ class RegisteredUserController extends Controller
         $lastinsertId = $user->id;
 
         if ($request->role == 'driver') {
-dd($request);
 
-            $driver = driver::create([
+
+            $driver = driveer::create([
                 'user_id' => $lastinsertId,
                 'license_number' => 0,
                 'current_location' => $request->current_location,
             ]);
+            
             //    lastinsertid driver
             $driver->save();
             $id_driver = $driver->id;
 
             course::create([
                 'id_driver' => $id_driver,
-                'id_trajet' => $request->line,
-
+                'trajet_id' => $request->line,
             ]);
+            
         }
 
 

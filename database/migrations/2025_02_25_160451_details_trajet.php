@@ -10,12 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('detailetrajets', function (Blueprint $table) {
+        Schema::create('detailestrajets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_trajet');
+            $table->unsignedBigInteger('trajet_id');
             $table->numericMorphs('order_id');
             $table->string('point_de_pause');
-            $table->foreign('id_trajet')->references('id')->on('trajets')->onDelete('cascade');
+            $table->integer('distance');
+            $table->foreign('trajet_id')->references('id')->on('trajets')->onDelete('cascade');
             $table->timestamps();
         });
 

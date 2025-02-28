@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class details_trajet extends Model
 {
-    protected $table = 'detailetrajets';
+    protected $table = 'detailestrajets';
     protected $fillable = [ 
-        'id_trajet',
+        'trajet_id',
         'order_id',
         'point_de_pause',
+        'distance',
        
     ];
 public function trajet(){
-   return $this->belongsTo(trajet::class);
+   return $this->belongsTo(trajet::class,'trajet_id');
 }
 
 }

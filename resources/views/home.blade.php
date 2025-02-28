@@ -46,40 +46,34 @@
             
             <!-- Booking Form -->
             <div class="max-w-4xl mx-auto bg-white rounded-lg p-6 shadow-lg">
-                <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-gray-700 text-left mb-2 font-medium">Départ</label>
-                        <select class="w-full p-3 border rounded-lg bg-white">
-                            <option>Casablanca</option>
-                            <option>Rabat</option>
-                            <option>Marrakech</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-left mb-2 font-medium">Destination</label>
-                        <select class="w-full p-3 border rounded-lg bg-white">
-                            <option>Rabat</option>
-                            <option>Casablanca</option>
-                            <option>Marrakech</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-left mb-2 font-medium">Date</label>
-                        <input type="datetime-local" class="w-full p-3 border rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-left mb-2 font-medium">Passagers</label>
-                        <select class="w-full p-3 border rounded-lg bg-white">
-                            <option>1 passager</option>
-                            <option>2 passagers</option>
-                            <option>3 passagers</option>
-                        </select>
-                    </div>
-                    <button class="md:col-span-4 bg-amber-400 text-gray-900 p-3 rounded-lg font-bold hover:bg-amber-500 transition">
-                        Trouver un taxi
-                    </button>
-                </form>
-            </div>
+    <form  action='{{ route('search.taxis') }}' method="GET"  class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label class="block text-gray-700 text-left mb-2 font-medium">Localisation</label>
+            <select  class="w-full p-3 border rounded-lg bg-white">
+                <option></option>
+                <option>Rabat</option>
+                <option>Marrakech</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-gray-700 text-left mb-2 font-medium">Disponibilité</label>
+            <select name="search"  class="w-full p-3 border rounded-lg bg-white">
+                <option value="true">En ligne</option>
+                <option value="false"> No Disponible</option>
+               
+            </select>
+        </div>
+        <div>
+            <label class="block text-gray-700 text-left mb-2 font-medium">Date et heure</label>
+            <input type="datetime-local" class="w-full p-3 border rounded-lg">
+        </div>
+        <button class="md:col-span-3 bg-amber-400 text-gray-900 p-3 rounded-lg font-bold hover:bg-amber-500 transition">
+            Rechercher un chauffeur disponible
+        </button>
+      
+    </form>
+</div>
+
         </div>
     </section>
 
@@ -203,103 +197,108 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl text-center font-bold mb-12">Trajets populaires</h2>
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="border rounded-lg overflow-hidden shadow-md">
-                    <img src="/api/placeholder/400/200" alt="Casablanca à Rabat" class="w-full h-48 object-cover">
+                @foreach ( $trajets as $trajet )
+                   <div class="border rounded-lg overflow-hidden shadow-md">
+                    <img src="{{ asset('storage/' . $trajet->driveer->user->profile_photo) }}" alt="Casablanca à Rabat" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <h3 class="text-xl font-bold">Mohamed K.</h3>
+                                <h3 class="text-xl font-bold">{{ $trajet->driveer->user->name }}</h3>
                                 <div class="text-amber-400">★★★★☆</div>
                             </div>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">En ligne</span>
+                            <div>
+                                <h3 class="text-xl font-bold">{{ $trajet->trajet->nom}}</h3>
+                            </div>
+                             @if ($trajet->driveer->is_available == true)
+                            <span class="bg-green-400 text-green-800 px-3 py-1 rounded-full text-sm">
+                       
+                            disponible
+                           </span>
+                          @else
+                          <span class="bg-red-400 text-red-800 px-3 py-1 rounded-full text-sm">
+                       
+                      Non disponible
+                        </span>
+                        @endif        
+                          
+                    
                         </div>
                         <div class="flex justify-between items-center">
                             <div class="text-gray-600">
-                                <p>Mercedes Vito</p>
+                                <p>Taxi</p>
                                 <p>6 places</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-2xl font-bold text-amber-400">250 MAD</p>
-                                <button class="mt-2 bg-amber-400 text-gray-900 px-4 py-2 rounded-full hover:bg-amber-500 transition">
-                                    Réserver
+                                <p class="text-2xl font-bold text-amber-400">{{ $trajet->trajet->prix }}MAD</p>
+                             @if ($trajet->driveer->is_available == true)
+                             
+              <button  class="mt-2 bg-amber-400 text-gray-900 px-4 py-2 rounded-full hover:bg-amber-500 transition">
+                              <a href="{{ route('detiles',['id'=>$trajet->driveer->id]) }}"> details </a>
                                 </button>
+                                @else
+                                <button  class="mt-2 bg-amber-400 text-gray-900 px-4 py-2 rounded-full hover:bg-amber-500 transition  cursor-not-allowed">
+                              <a > details </a>
+                                </button>
+                                @endif
+                             
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="border rounded-lg overflow-hidden shadow-md">
-                    <img src="/api/placeholder/400/200" alt="Casablanca à Rabat" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold">Mohamed K.</h3>
-                                <div class="text-amber-400">★★★★☆</div>
-                            </div>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">En ligne</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-gray-600">
-                                <p>Mercedes Vito</p>
-                                <p>6 places</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-2xl font-bold text-amber-400">250 MAD</p>
-                                <button class="mt-2 bg-amber-400 text-gray-900 px-4 py-2 rounded-full hover:bg-amber-500 transition">
-                                    Réserver
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="border rounded-lg overflow-hidden shadow-md">
-                    <img src="/api/placeholder/400/200" alt="Casablanca à Rabat" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold">Mohamed K.</h3>
-                                <div class="text-amber-400">★★★★☆</div>
-                            </div>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">En ligne</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-gray-600">
-                                <p>Mercedes Vito</p>
-                                <p>6 places</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-2xl font-bold text-amber-400">250 MAD</p>
-                                <button class="mt-2 bg-amber-400 text-gray-900 px-4 py-2 rounded-full hover:bg-amber-500 transition">
-                                    Réserver
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
+                @endforeach
+             
                 <!-- Répète pour plus d'éléments -->
             </div>
     
             <!-- Pagination -->
-            <div class="mt-8 flex justify-center">
-                <nav aria-label="Page navigation">
-                    <ul class="flex items-center space-x-4">
+            <div class="flex justify-center mt-8">
+        @if ($trajets->hasPages())
+            <nav role="navigation" aria-label="Pagination Navigation">
+                <ul class="inline-flex items-center space-x-1">
+
+                    @if ($trajets->onFirstPage())
                         <li>
-                            <a href="#" class="text-gray-500 hover:text-gray-700">&laquo; Précédent</a>
+                            <span class="px-3 py-2 text-gray-500 cursor-not-allowed">&laquo; Précédent</span>
                         </li>
+                    @else
                         <li>
-                            <a href="#" class="text-gray-500 hover:text-gray-700">1</a>
+                            <a href="{{ $trajets->previousPageUrl() }}" class="px-3 py-2 text-blue-500 hover:text-blue-700">&laquo;
+                                Précédent</a>
                         </li>
+                    @endif
+
+                    @foreach ($trajets->links()->elements as $element)
+                        @if (is_string($element))
+                            <li><span class="px-3 py-2 text-gray-500">{{ $element }}</span></li>
+                        @elseif (is_array($element))
+                            @foreach ($element as $page => $url)
+                                <li>
+                                    @if ($page == $trajets->currentPage())
+                                        <span class="px-3 py-2 bg-blue-500 text-white rounded-lg">{{ $page }}</span>
+                                    @else
+                                        <a href="{{ $url }}" class="px-3 py-2 text-blue-500 hover:text-blue-700 rounded-lg">{{ $page }}</a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                    {{-- Bouton Suivant --}}
+                    @if ($trajets->hasMorePages())
                         <li>
-                            <a href="#" class="text-gray-500 hover:text-gray-700">2</a>
+                            <a href="{{ $trajets->nextPageUrl() }}" class="px-3 py-2 text-blue-500 hover:text-blue-700">Suivant
+                                &raquo;</a>
                         </li>
+                    @else
                         <li>
-                            <a href="#" class="text-gray-500 hover:text-gray-700">3</a>
+                            <span class="px-3 py-2 text-gray-500 cursor-not-allowed">Suivant &raquo;</span>
                         </li>
-                        <li>
-                            <a href="#" class="text-gray-500 hover:text-gray-700">Suivant &raquo;</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                    @endif
+                </ul>
+            </nav>
+        @endif
+    </div>
         </div>
     </section>
     

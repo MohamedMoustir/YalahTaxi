@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class User extends Authenticatable
 {
@@ -51,4 +52,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function driveer()
+    {
+        return $this->hasOne(driveer::class,'user_id');
+    }
+ 
+    public function course_passenger()
+    {
+        return $this->belongsToMany(course_passenger::class,'course_passenger', 'course_id', 'passeger_id');
+    }    
 }

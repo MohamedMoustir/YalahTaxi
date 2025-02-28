@@ -9,7 +9,18 @@ class Course extends Model
     protected $table = 'courses';
 
     protected $fillable = [
-   'id_trajet',
+   'trajet_id',
    'id_driver',
+   'statut',
     ];
+    public function trajet(){
+        return $this->belongsTo(trajet::class,'trajet_id');
+    }
+    public function driveer(){
+        return $this->belongsTo(driveer::class,'id_driver');
+    }
+    public function course_passenger()
+    {
+        return $this->belongsToMany(course_passenger::class,'course_passenger', 'course_id', 'passeger_id');
+    }    
 }

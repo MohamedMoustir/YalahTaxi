@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drivers', function (Blueprint $table) {
+        Schema::create('driveers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('id')->onDelete('cascade');  
             $table->string('license_number');

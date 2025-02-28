@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('trajets', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->integer('prix');
             $table->timestamps();
         });
 

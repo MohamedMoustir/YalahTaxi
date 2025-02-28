@@ -12,7 +12,7 @@ services:
       - DB_HOST=postgres
       - REDIS_HOST=redis
     volumes:
-      - ./:/var/www/html
+      - .:/var/www/html:cached
     networks:
       - laravel-network
     depends_on:

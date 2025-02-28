@@ -14,11 +14,11 @@ return new class extends Migration
         schema::create('courses',function(Blueprint $table){
           $table->id();
           $table->unsignedBigInteger('id_driver');
-          $table->unsignedBigInteger('id_trajet');
-          $table->foreign('id_driver')->on('drivers')->references('id')->onDelete('cascade');
-          $table->foreign('id_trajet')->on('trajets')->references('id')->onDelete('cascade');
+          $table->unsignedBigInteger('trajet_id');
+          $table->foreign('id_driver')->on('driveers')->references('id')->onDelete('cascade');
+          $table->foreign('trajet_id')->on('trajets')->references('id')->onDelete('cascade');
+          $table->enum('statut',['allez','retour'])->default('allez');
           $table->timestamps();
-
         });
 
     }

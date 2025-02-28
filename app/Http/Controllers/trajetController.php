@@ -13,6 +13,10 @@ class trajetController extends Controller
     return view('admin.dashboard');
   }
 
+  public function ditlesTrajets(){
+    return view('admin.trajet');
+  }
+
   public function store(request $request)
   {
 
@@ -24,21 +28,33 @@ class trajetController extends Controller
 
     $trajets = trajet::create([
       'nom' => $request->nom,
+      'prix'=>$request->prix[0],
     ]);
-
-    $trajets->save();
-    $lastinsertId = $trajets->id;
-
     foreach ($request->point_de_pause as $index => $point) {
 
       $order = $request->order[$index];
-
+      $distance = $request->Distance[$index];
+      // $prix = $request->prix[$index];
+       
+      // $trajets = trajet::create([
+      //   'nom' => $request->nom,
+      //   'prix'=>$prix,
+      // ]);
+    
+    
+        $trajets->save();
+        $lastinsertId = $trajets->id;
+        
       $details_trajet = details_trajet::create([
-        'id_trajet' => $lastinsertId,
+        'trajet_id' => $lastinsertId,
         'point_de_pause' => $point,
         'order_id' => $order,
+        'distance'=>$distance,
       ]);
     }
+
+
+
     return redirect()->back();
   }
 
@@ -47,4 +63,6 @@ class trajetController extends Controller
   return view('auth.register',compact('nomLine'));
  }
  
+  
+
 }
